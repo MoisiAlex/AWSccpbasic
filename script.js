@@ -6,7 +6,7 @@
 
     const CONFIG = 
           {
-            "hiddenCA": ["contactsInQueue","agentsAvailable"]
+            "hiddenCA": ["contactsInQueue","agentsAvailable","oldestContact","agentsOnline"]
           };
 
 
