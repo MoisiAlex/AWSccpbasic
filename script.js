@@ -39,6 +39,7 @@
         updateQueueAttribute(contact.getAttributes());
         contact.onEnded(clearContactAttribute);
         contact.onEnded(clearQueueAttribute);
+        contact.onAccepted(clearQueueAttribute);
     }
 
     function updateContactAttribute(msg){
