@@ -62,9 +62,9 @@
             var cell2 = document.getElementById('lwt');
             var cell3 = document.getElementById('availableAgents');
             var cell4 = document.getElementById('onlineAgents');
-            cell1.innerHTML = msg.contactsInQueue.value;
-            cell2.innerHTML = msg.agentsAvailable.value;
-            cell3.innerHTML = msg.oldestContact.value;
+            cell1.innerHTML = msg.contactsInQueue.value;           
+            cell2.innerHTML = msg.oldestContact.value;
+            cell3.innerHTML = msg.agentsAvailable.value;
             cell4.innerHTML = msg.agentsOnline.value;
         
         
