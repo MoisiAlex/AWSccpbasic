@@ -38,6 +38,7 @@
         updateContactAttribute(contact.getAttributes());    
         updateQueueAttribute(contact.getAttributes());
         contact.onEnded(clearContactAttribute);
+        contact.onEnded(clearQueueAttribute);
     }
 
     function updateContactAttribute(msg){
@@ -70,6 +71,13 @@
         var old_tbody= document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
         var new_tbody = document.createElement('tbody');    
         old_tbody.parentNode.replaceChild(new_tbody, old_tbody);     
+    }
+
+    function clearQueueAttribute(){
+            var cell1 = document.getElementById('calls');
+            var cell2 = document.getElementById('agents');
+            cell1.innerHTML = " ";
+            cell2.innerHTML = " "
     }
 
 
