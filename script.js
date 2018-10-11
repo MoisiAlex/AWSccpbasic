@@ -36,6 +36,7 @@
         logInfoMsg("Contact attributes are " + JSON.stringify(contact.getAttributes()));
         
         updateContactAttribute(contact.getAttributes());    
+        updateQueueAttribute(contact.getAttributes());
         contact.onEnded(clearContactAttribute);
     }
 
