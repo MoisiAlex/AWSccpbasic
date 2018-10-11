@@ -59,10 +59,13 @@
     function updateQueueAttribute(msg){
         console.log(msg);
             var cell1 = document.getElementById('calls');
-            var cell2 = document.getElementById('agents');
+            var cell2 = document.getElementById('lwt');
+            var cell3 = document.getElementById('availableAgents');
+            var cell4 = document.getElementById('onlineAgents');
             cell1.innerHTML = msg.contactsInQueue.value;
             cell2.innerHTML = msg.agentsAvailable.value;
-        
+            cell3.innerHTML = msg.oldestContact.value;
+            cell4.innerHTML = msg.agentsOnline.value;
         
         
     }
@@ -76,9 +79,13 @@
 
     function clearQueueAttribute(){
             var cell1 = document.getElementById('calls');
-            var cell2 = document.getElementById('agents');
+            var cell2 = document.getElementById('lwt');
+            var cell3 = document.getElementById('availableAgents');
+            var cell4 = document.getElementById('onlineAgents');
             cell1.innerHTML = " ";
-            cell2.innerHTML = " "
+            cell2.innerHTML = " ";
+            cell3.innerHTML = " ";
+            cell4.innerHTML = " ";
     }
 
 
