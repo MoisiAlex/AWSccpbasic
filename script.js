@@ -91,9 +91,12 @@
 
 function getMetricData(){
     
+ // Initialize the Amazon Cognito credentials provider
+AWS.config.region = 'us-east-1'; // Region
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-east-1:6df735bc-e84e-4a23-af3f-9c6307d41f4b',
+});
     
-    var AWS = require('aws-sdk');
-    AWS.config.update({ region: 'us-east-1' });
     console.log('Running getCurrentMetric function');
    
     var connect = new AWS.Connect();   
