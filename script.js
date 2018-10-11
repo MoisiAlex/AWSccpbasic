@@ -63,7 +63,7 @@
             var cell3 = document.getElementById('availableAgents');
             var cell4 = document.getElementById('onlineAgents');
             cell1.innerHTML = msg.contactsInQueue.value;           
-            cell2.innerHTML = msg.oldestContact.value;
+            cell2.innerHTML = parseInt(msg.oldestContact.value)/60;
             cell3.innerHTML = msg.agentsAvailable.value;
             cell4.innerHTML = msg.agentsOnline.value;
         
@@ -88,6 +88,46 @@
             cell4.innerHTML = " ";
     }
 
+
+function getMetricData(){
+    
+    
+    var AWS = require('aws-sdk');
+    AWS.config.update({ region: 'us-east-1' });
+    console.log('Running getCurrentMetric function');
+   
+    var connect = new AWS.Connect();   
+    console.log('runing get metrics');
+    var params = {
+      CurrentMetrics: [
+        {
+          Name: 'AGENTS_ONLINE',
+          Unit: 'COUNT'
+        }
+      ],
+      Filters: {
+        Channels: [
+          'VOICE'
+        ],
+        Queues: [
+          'arn:aws:connect:us-east-1:553456133668:instance/6d9cd6a4-5f09-4306-adbc-9d4a7c316b34/queue/8055438f-e7ae-48ec-b370-011837e59818'
+        ]
+      },
+      InstanceId: '6d9cd6a4-5f09-4306-adbc-9d4a7c316b34',
+      MaxResults: 1
+    };
+   
+    try{
+    connect.getCurrentMetricData(params, function(err, data) {
+      if (err) console.log('Problem here' + err, err.stack);
+      else     console.log('Return data' + JSON.stringify(data));
+     
+    });}
+      catch(error){
+        console.log(error);
+      }
+    
+}
 
     function logMsgToScreen(msg) {
         logMsgs.innerHTML =  new Date().toLocaleTimeString() + ' : ' + msg + '<br>' + logMsgs.innerHTML;
