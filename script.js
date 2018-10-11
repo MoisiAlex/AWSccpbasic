@@ -3,6 +3,14 @@
     //replace with the CCP URL for the current Amazon Connect instance
     var ccpUrl = "https://demoinstance.awsapps.com/connect/ccp#/";
 
+
+    const CONFIG = 
+          {
+            "hiddenCA": ["contactsInQueue","agentsAvailable"]
+          };
+
+
+
     connect.core.initCCP(containerDiv, {
         ccpUrl: ccpUrl,        
         loginPopup: true,         
@@ -34,7 +42,7 @@
     function updateContactAttribute(msg){
         var tableRef = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];      
         for (var key in msg) {
-            if (msg.hasOwnProperty(key)) {
+           if (msg.hasOwnProperty(key) && CONFIG.hiddenCA.indexOf(key)==-1) {
                         var row = tableRef.insertRow(tableRef.rows.length);
                         var cell1 = row.insertCell(0);
                         var cell2 = row.insertCell(1);
@@ -42,6 +50,17 @@
                         cell2.innerHTML = msg[key]['value'];
             }
         }
+        
+    }
+
+    function updateQueueAttribute(msg){
+        console.log(msg);
+            var cell1 = document.getElementById('calls');
+            var cell2 = document.getElementById('agents');
+            cell1.innerHTML = msg.contactsInQueue;
+            cell2.innerHTML = msg.agentsAvailable;
+        
+        
         
     }
 
