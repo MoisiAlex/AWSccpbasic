@@ -58,8 +58,8 @@
         console.log(msg);
             var cell1 = document.getElementById('calls');
             var cell2 = document.getElementById('agents');
-            cell1.innerHTML = msg.contactsInQueue;
-            cell2.innerHTML = msg.agentsAvailable;
+            cell1.innerHTML = msg.contactsInQueue.value;
+            cell2.innerHTML = msg.agentsAvailable.value;
         
         
         
