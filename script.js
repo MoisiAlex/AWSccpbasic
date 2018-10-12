@@ -1,14 +1,17 @@
  window.myCPP = window.myCPP || {};
 
     //replace with the CCP URL for the current Amazon Connect instance
-    var ccpUrl = "https://perficientdemo.awsapps.com/connect/ccp#/";
+    const ccpUrl = "https://perficientdemo.awsapps.com/connect/ccp#/";
 
 
+    //add any contact Attributes that should be hidden
     const CONFIG = 
           {
-            "hiddenCA": ["contactsInQueue","agentsAvailable","oldestContact","agentsOnline"]
+            "hiddenCA": ["sample"]
           };
 
+    //replace with API URL
+    const metricAPI = "https://uhht7vyu3j.execute-api.us-east-1.amazonaws.com/Production";
 
 
     connect.core.initCCP(containerDiv, {
@@ -36,19 +39,19 @@
         logInfoMsg("Contact attributes are " + JSON.stringify(contact.getAttributes()));
         
         updateContactAttribute(contact.getAttributes());    
-        updateQueueAttribute(contact.getAttributes());
+        updateQueueAttribute();
         contact.onEnded(clearContactAttribute);
         contact.onEnded(clearQueueAttribute);
         contact.onAccepted(clearQueueAttribute);
     }
 
     function updateContactAttribute(msg){
-        var tableRef = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];      
-        for (var key in msg) {
+        const tableRef = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];      
+        for (let key in msg) {
            if (msg.hasOwnProperty(key) && CONFIG.hiddenCA.indexOf(key)==-1) {
-                        var row = tableRef.insertRow(tableRef.rows.length);
-                        var cell1 = row.insertCell(0);
-                        var cell2 = row.insertCell(1);
+                        const row = tableRef.insertRow(tableRef.rows.length);
+                        let cell1 = row.insertCell(0);
+                        let cell2 = row.insertCell(1);
                         cell1.innerHTML = key;
                         cell2.innerHTML = msg[key]['value'];
             }
@@ -56,81 +59,54 @@
         
     }
 
-    function updateQueueAttribute(msg){
-        console.log(msg);
-            var cell1 = document.getElementById('calls');
-            var cell2 = document.getElementById('lwt');
-            var cell3 = document.getElementById('availableAgents');
-            var cell4 = document.getElementById('onlineAgents');
+    function updateQueueAttribute(){
+        
+
+        var request = new XMLHttpRequest();
+
+        request.open('GET', metricAPI , true);
+        request.onload = function () {
+
+          // Begin accessing JSON data here
+          var data = JSON.parse(this.response);
+
+          if (request.status >= 200 && request.status < 400) {
+            data.forEach(element => {
+              console.log(element);
+            });
+          } else {
+            console.log('error');
+          }
+        }
+
+        request.send();
+
+     /*       const cell1 = document.getElementById('calls');
+            const cell2 = document.getElementById('lwt');
+            const cell3 = document.getElementById('availableAgents');
+            const cell4 = document.getElementById('onlineAgents');
             cell1.innerHTML = msg.contactsInQueue.value;           
-            cell2.innerHTML = parseInt(msg.oldestContact.value)/60;
+            cell2.innerHTML = (parseInt(msg.oldestContact.value)+1)/60 + " min";
             cell3.innerHTML = msg.agentsAvailable.value;
             cell4.innerHTML = msg.agentsOnline.value;
         
-        
+        */
     }
 
 
     function clearContactAttribute(){
-        var old_tbody= document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
-        var new_tbody = document.createElement('tbody');    
+        const old_tbody= document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
+        const new_tbody = document.createElement('tbody');    
         old_tbody.parentNode.replaceChild(new_tbody, old_tbody);     
     }
 
     function clearQueueAttribute(){
-            var cell1 = document.getElementById('calls');
-            var cell2 = document.getElementById('lwt');
-            var cell3 = document.getElementById('availableAgents');
-            var cell4 = document.getElementById('onlineAgents');
-            cell1.innerHTML = " ";
-            cell2.innerHTML = " ";
-            cell3.innerHTML = " ";
-            cell4.innerHTML = " ";
+          document.getElementById('calls').innerHTML = " ";
+          document.getElementById('lwt').innerHTML = " ";
+          document.getElementById('availableAgents').innerHTML = " ";
+          document.getElementById('onlineAgents').innerHTML = " ";
     }
 
-
-function getMetricData(){
-    
- // Initialize the Amazon Cognito credentials provider
-AWS.config.region = 'us-east-1'; // Region
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: 'us-east-1:6df735bc-e84e-4a23-af3f-9c6307d41f4b',
-});
-    
-    console.log('Running getCurrentMetric function');
-   
-    var connect = new AWS.Connect();   
-    console.log('runing get metrics');
-    var params = {
-      CurrentMetrics: [
-        {
-          Name: 'AGENTS_ONLINE',
-          Unit: 'COUNT'
-        }
-      ],
-      Filters: {
-        Channels: [
-          'VOICE'
-        ],
-        Queues: [
-          'arn:aws:connect:us-east-1:553456133668:instance/6d9cd6a4-5f09-4306-adbc-9d4a7c316b34/queue/8055438f-e7ae-48ec-b370-011837e59818'
-        ]
-      },
-      InstanceId: '6d9cd6a4-5f09-4306-adbc-9d4a7c316b34',
-      MaxResults: 1
-    };
-   
-    try{
-    connect.getCurrentMetricData(params, function(err, data) {
-      if (err) console.log('Problem here' + err, err.stack);
-      else     console.log('Return data' + JSON.stringify(data));
-     
-    });}
-      catch(error){
-        console.log(error);
-      }
-    
-}
 
     function logMsgToScreen(msg) {
         logMsgs.innerHTML =  new Date().toLocaleTimeString() + ' : ' + msg + '<br>' + logMsgs.innerHTML;
