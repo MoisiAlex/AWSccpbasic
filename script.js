@@ -59,6 +59,12 @@
         
     }
 
+function millisToMinAndSec(millis) {
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
+
     function updateQueueAttribute(){
         
 
@@ -73,11 +79,7 @@
           if (request.status >= 200 && request.status < 400) {
              console.log(data);
               document.getElementById('calls').innerHTML = data.CONTACTS_IN_QUEUE;
-              
-              let lwt = data.OLDEST_CONTACT_AGE;
-              let oldest = 0;
-              (lwt> 60) ? oldest = parseInt(lwt)/60 +" min" : oldest = lwt + " sec";
-              document.getElementById('lwt').innerHTML = oldest;
+              document.getElementById('lwt').innerHTML = millisToMinAndSec(data.OLDEST_CONTACT_AGE);
               document.getElementById('availableAgents').innerHTML = data.AGENTS_AVAILABLE;
               document.getElementById('onlineAgents').innerHTML = data.AGENTS_ONLINE;
              
