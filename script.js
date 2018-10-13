@@ -71,9 +71,9 @@
           var data = JSON.parse(this.response);
 
           if (request.status >= 200 && request.status < 400) {
-            data.forEach(element => {
-              console.log(element);
-            });
+           
+              console.log(data);
+            
           } else {
             console.log('error');
           }
