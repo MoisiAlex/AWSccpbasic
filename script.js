@@ -75,7 +75,7 @@
               document.getElementById('calls').innerHTML = data.CONTACTS_IN_QUEUE;
               
               let lwt = data.OLDEST_CONTACT_AGE;
-              let oldest = 0
+              let oldest = 0;
               (lwt> 60) ? oldest = parseInt(lwt)/60 +" min" : oldest = lwt + " sec";
               document.getElementById('lwt').innerHTML = oldest;
               document.getElementById('availableAgents').innerHTML = data.AGENTS_AVAILABLE;
