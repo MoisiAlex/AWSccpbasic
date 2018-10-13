@@ -71,8 +71,12 @@
           var data = JSON.parse(this.response);
 
           if (request.status >= 200 && request.status < 400) {
-           
-              console.log(data);
+             console.log("recieved data: "+data);
+              document.getElementById('calls').innerHTML = data.CONTACTS_IN_QUEUE;
+              document.getElementById('lwt').innerHTM L= data.OLDEST_CONTACT_AGE;
+              document.getElementById('availableAgents').innerHTML = data.AGENTS_AVAILABLE;
+              document.getElementById('onlineAgents').innerHTML = data.AGENTS_ONLINE;
+             
             
           } else {
             console.log('error');
