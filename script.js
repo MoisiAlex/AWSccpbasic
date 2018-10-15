@@ -127,14 +127,14 @@
              console.log(data);
               
                if(data.CONTACTS_IN_QUEUE > 0){
-                    setCookie(contactsInQueue,data.CONTACTS_IN_QUEUE,1);
-                    setCookie(oldestContactAge,data.OLDEST_CONTACT_AGE,1);
+                    setCookie("contactsInQueue",data.CONTACTS_IN_QUEUE,1);
+                    setCookie("oldestContactAge",data.OLDEST_CONTACT_AGE,1);
 
                       document.getElementById('calls').innerHTML = data.CONTACTS_IN_QUEUE;
                       document.getElementById('lwt').innerHTML = millisToMinAndSec(data.OLDEST_CONTACT_AGE);
 
         }
-        else if(getCookie(contactsInQueue)>0)
+        else if(getCookie("contactsInQueue")>0)
             {
                 
               document.getElementById('calls').innerHTML = getCookie(contactsInQueue);
