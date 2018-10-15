@@ -116,6 +116,8 @@
 
         var requestData = getCurrentMetrics();
         
+        console.log(requestData);
+        
         if(requestData.CONTACTS_IN_QUEUE > 0){
             setCookie(contactsInQueue,requestData.CONTACTS_IN_QUEUE,1);
             setCookie(oldestContactAge,requestData.OLDEST_CONTACT_AGE,1);
