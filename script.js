@@ -114,7 +114,60 @@
 
     function updateQueueAttribute(){
 
-        var requestData = getCurrentMetrics();
+
+  var request = new XMLHttpRequest();
+
+        request.open('GET', metricAPI , true);
+        request.onload = function () {
+
+          // Begin accessing JSON data here
+          var data = JSON.parse(this.response);
+
+          if (request.status >= 200 && request.status < 400) {
+             console.log(data);
+              
+               if(requestData.CONTACTS_IN_QUEUE > 0){
+                    setCookie(contactsInQueue,requestData.CONTACTS_IN_QUEUE,1);
+                    setCookie(oldestContactAge,requestData.OLDEST_CONTACT_AGE,1);
+
+                      document.getElementById('calls').innerHTML = requestData.CONTACTS_IN_QUEUE;
+                      document.getElementById('lwt').innerHTML = millisToMinAndSec(requestData.OLDEST_CONTACT_AGE);
+
+        }
+        else if(getCookie(contactsInQueue)>0)
+            {
+                
+              document.getElementById('calls').innerHTML = getCookie(contactsInQueue);
+              document.getElementById('lwt').innerHTML = millisToMinAndSec(getCookie(oldestContactAge));
+                            
+            }
+        else{
+             document.getElementById('calls').innerHTML = "1";
+             document.getElementById('lwt').innerHTML = millisToMinAndSec(requestData.OLDEST_CONTACT_AGE);
+        }
+
+        
+              document.getElementById('availableAgents').innerHTML = requestData.AGENTS_AVAILABLE;
+              document.getElementById('onlineAgents').innerHTML = requestData.AGENTS_ONLINE;
+        
+              
+              
+              
+              
+              
+              
+             
+          } else {
+            console.log('error');
+           
+          }
+        }
+
+    request.send();
+
+
+
+  /*      var requestData = getCurrentMetrics();
         
         console.log(requestData);
         
@@ -144,6 +197,8 @@
               document.getElementById('onlineAgents').innerHTML = requestData.AGENTS_ONLINE;
         
 
+
+*/
     }
 
 
