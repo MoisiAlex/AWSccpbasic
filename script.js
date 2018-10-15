@@ -59,15 +59,37 @@
         
     }
 
-function millisToMinAndSec(millis) {
-  var minutes = Math.floor(millis / 60000);
-  var seconds = ((millis % 60000) / 1000).toFixed(0);
-  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-}
+        function millisToMinAndSec(millis) {
+          var minutes = Math.floor(millis / 60000);
+          var seconds = ((millis % 60000) / 1000).toFixed(0);
+          return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+        }
 
-    function updateQueueAttribute(){
-        
+        function setCookie(cname,cvalue,exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            var expires = "expires=" + d.toGMTString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
 
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return 0;
+        }
+
+
+    function getCurrentMetrics(){
         var request = new XMLHttpRequest();
 
         request.open('GET', metricAPI , true);
@@ -78,29 +100,48 @@ function millisToMinAndSec(millis) {
 
           if (request.status >= 200 && request.status < 400) {
              console.log(data);
-              document.getElementById('calls').innerHTML = data.CONTACTS_IN_QUEUE;
-              document.getElementById('lwt').innerHTML = millisToMinAndSec(data.OLDEST_CONTACT_AGE);
-              document.getElementById('availableAgents').innerHTML = data.AGENTS_AVAILABLE;
-              document.getElementById('onlineAgents').innerHTML = data.AGENTS_ONLINE;
-             
-            
+             return(data);            
           } else {
             console.log('error');
+            return(null);  
           }
         }
 
-        request.send();
+    request.send();
 
-     /*       const cell1 = document.getElementById('calls');
-            const cell2 = document.getElementById('lwt');
-            const cell3 = document.getElementById('availableAgents');
-            const cell4 = document.getElementById('onlineAgents');
-            cell1.innerHTML = msg.contactsInQueue.value;           
-            cell2.innerHTML = (parseInt(msg.oldestContact.value)+1)/60 + " min";
-            cell3.innerHTML = msg.agentsAvailable.value;
-            cell4.innerHTML = msg.agentsOnline.value;
         
-        */
+    }
+
+    function updateQueueAttribute(){
+
+        var requestData = getCurrentMetrics();
+        
+        if(requestData.CONTACTS_IN_QUEUE > 0){
+            setCookie(contactsInQueue,requestData.CONTACTS_IN_QUEUE,1);
+            setCookie(oldestContactAge,requestData.OLDEST_CONTACT_AGE,1);
+            
+              document.getElementById('calls').innerHTML = requestData.CONTACTS_IN_QUEUE;
+              document.getElementById('lwt').innerHTML = millisToMinAndSec(requestData.OLDEST_CONTACT_AGE);
+
+            
+        }
+        else if(getCookie(contactsInQueue)>0)
+            {
+                
+              document.getElementById('calls').innerHTML = getCookie(contactsInQueue);
+              document.getElementById('lwt').innerHTML = millisToMinAndSec(getCookie(oldestContactAge));
+                            
+            }
+        else{
+             document.getElementById('calls').innerHTML = "1";
+             document.getElementById('lwt').innerHTML = millisToMinAndSec(requestData.OLDEST_CONTACT_AGE);
+        }
+
+        
+              document.getElementById('availableAgents').innerHTML = requestData.AGENTS_AVAILABLE;
+              document.getElementById('onlineAgents').innerHTML = requestData.AGENTS_ONLINE;
+        
+
     }
 
 
