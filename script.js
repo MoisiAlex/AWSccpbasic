@@ -137,8 +137,8 @@
         else if(getCookie("contactsInQueue")>0)
             {
                 
-              document.getElementById('calls').innerHTML = getCookie(contactsInQueue);
-              document.getElementById('lwt').innerHTML = millisToMinAndSec(getCookie(oldestContactAge));
+              document.getElementById('calls').innerHTML = getCookie("contactsInQueue");
+              document.getElementById('lwt').innerHTML = millisToMinAndSec(getCookie("oldestContactAge"));
                             
             }
         else{
