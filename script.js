@@ -23,7 +23,7 @@
     });
 
     connect.contact(subscribeToContactEvents);  
-    
+    updateQueueAttribute();
 
     function subscribeToContactEvents(contact) {
         window.myCPP.contact = contact;
@@ -39,10 +39,9 @@
         logInfoMsg("Contact attributes are " + JSON.stringify(contact.getAttributes()));
         
         updateContactAttribute(contact.getAttributes());    
-        updateQueueAttribute();
+        
         contact.onEnded(clearContactAttribute);
-        contact.onEnded(clearQueueAttribute);
-        contact.onAccepted(clearQueueAttribute);
+      
     }
 
     function updateContactAttribute(msg){
