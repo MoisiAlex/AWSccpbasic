@@ -115,7 +115,7 @@
     function updateQueueAttribute(){
 
 
-  var request = new XMLHttpRequest();
+    var request = new XMLHttpRequest();
 
         request.open('GET', metricAPI , true);
         request.onload = function () {
@@ -150,7 +150,7 @@
               document.getElementById('availableAgents').innerHTML = data.AGENTS_AVAILABLE;
               document.getElementById('onlineAgents').innerHTML = data.AGENTS_ONLINE;
         
-              
+             setTimeout(updateQueueAttribute, 5000); 
               
               
               
