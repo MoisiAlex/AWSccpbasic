@@ -125,37 +125,15 @@
           if (request.status >= 200 && request.status < 400) {
              console.log(data);
               
-               if(data.CONTACTS_IN_QUEUE > 0){
-                    setCookie("contactsInQueue",data.CONTACTS_IN_QUEUE,1);
-                    setCookie("oldestContactAge",data.OLDEST_CONTACT_AGE,1);
-
+             
                       document.getElementById('calls').innerHTML = data.CONTACTS_IN_QUEUE;
-                      document.getElementById('lwt').innerHTML = millisToMinAndSec(data.OLDEST_CONTACT_AGE);
-
-        }
-        else if(getCookie("contactsInQueue")>0)
-            {
-                
-              document.getElementById('calls').innerHTML = getCookie("contactsInQueue");
-              document.getElementById('lwt').innerHTML = millisToMinAndSec(getCookie("oldestContactAge"));
-                            
-            }
-        else{
-             document.getElementById('calls').innerHTML = "1";
-             document.getElementById('lwt').innerHTML = millisToMinAndSec(data.OLDEST_CONTACT_AGE);
-        }
-
-        
+                      document.getElementById('lwt').innerHTML = millisToMinAndSec(data.OLDEST_CONTACT_AGE);     
               document.getElementById('availableAgents').innerHTML = data.AGENTS_AVAILABLE;
               document.getElementById('onlineAgents').innerHTML = data.AGENTS_ONLINE;
         
              setTimeout(updateQueueAttribute, 5000); 
               
-              
-              
-              
-              
-             
+            
           } else {
             console.log('error');
            
