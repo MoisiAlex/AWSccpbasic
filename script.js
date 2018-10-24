@@ -73,7 +73,7 @@
 
 
     async function  updateQueueAttribute (){
-        let data = await getCurrentMetrics();
+        let data = await getCurrentMetrics().promise();
         document.getElementById('calls').innerHTML = data.CONTACTS_IN_QUEUE;
         document.getElementById('lwt').innerHTML = millisToMinAndSec(data.OLDEST_CONTACT_AGE);
         document.getElementById('availableAgents').innerHTML = data.AGENTS_AVAILABLE;
