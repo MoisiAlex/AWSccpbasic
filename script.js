@@ -69,6 +69,7 @@
               }
             }
         request.send();
+        setTimeout(getCurrentMetrics, 5000);
     }
 
 
