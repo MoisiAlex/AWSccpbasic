@@ -1,6 +1,6 @@
  window.myCPP = window.myCPP || {};
 
-    //replace with the CCP URL for the current Amazon Connect instance
+   //replace with the CCP URL for the current Amazon Connect instance
    // const ccpUrl = "https://MYINSTANCE.awsapps.com/connect/ccp#/";
     const ccpUrl = "https://perficientdemo.awsapps.com/connect/ccp#/";
 
@@ -23,7 +23,7 @@
         window.myCPP.contact = contact;
         updateContactAttribute(contact.getAttributes());    
         contact.onEnded(clearContactAttribute);
-        updateQueueAttribute();
+        getCurrentMetrics();
     }
 
     function updateContactAttribute(msg){
@@ -62,18 +62,18 @@
 
               if (request.status >= 200 && request.status < 400) {
                  console.log(data);
-                 return(data);            
+                 updateQueueAttribute(data);          
               } else {
                 console.log('error');
-                return(null);  
+                
               }
             }
         request.send();
     }
 
 
-    async function  updateQueueAttribute (){
-        let data = await getCurrentMetrics().promise();
+     function  updateQueueAttribute(data){
+        
         document.getElementById('calls').innerHTML = data.CONTACTS_IN_QUEUE;
         document.getElementById('lwt').innerHTML = millisToMinAndSec(data.OLDEST_CONTACT_AGE);
         document.getElementById('availableAgents').innerHTML = data.AGENTS_AVAILABLE;
