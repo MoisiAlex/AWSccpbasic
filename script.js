@@ -1,5 +1,5 @@
  window.myCPP = window.myCPP || {};
-
+ window.onload = getCurrentMetrics;
    //replace with the CCP URL for the current Amazon Connect instance
    // const ccpUrl = "https://MYINSTANCE.awsapps.com/connect/ccp#/";
     const ccpUrl = "https://perficientdemo.awsapps.com/connect/ccp#/";
@@ -23,7 +23,7 @@
         window.myCPP.contact = contact;
         updateContactAttribute(contact.getAttributes());    
         contact.onEnded(clearContactAttribute);
-        getCurrentMetrics();
+        
     }
 
     function updateContactAttribute(msg){
