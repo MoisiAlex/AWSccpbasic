@@ -41,7 +41,8 @@ window.myCPP = window.myCPP || {};
         const tableRef = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
         let row = tableRef.insertRow(tableRef.rows.length);
         let cell1 = row.insertCell(0);
-        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%20"+addDashes(contactID);
+     //   let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%20"+addDashes(contactID);
+        let url ="https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%20972-580-2000";
         cell1.innerHTML = '<a href="'+url+'"target="_blank">JIRA link</a>';
     }
             
