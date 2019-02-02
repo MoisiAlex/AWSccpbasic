@@ -53,12 +53,18 @@ window.myCPP = window.myCPP || {};
     }
 
 
+    function addDashes(number)
+    {   f_val = number.replace(/\D[^\.]/g, "");
+        phoneNumber = f_val.slice(0,3)+"-"+f_val.slice(3,6)+"-"+f_val.slice(6);
+        return phoneNumber;
+    }
+
     function updateContactAttribute(contactID){
         const tableRef = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
         
                         let row = tableRef.insertRow(tableRef.rows.length);
                         let cell1 = row.insertCell(0);
-                        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+contactID.replace('+1', '%20');
+                        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+addDashes(contactID.replace('+1', '%20'));
                         cell1.innerHTML = '<a href="'+url+'"target="_blank">JIRA link</a>';
                        
                 }
