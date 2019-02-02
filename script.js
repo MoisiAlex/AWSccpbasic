@@ -40,7 +40,7 @@ window.myCPP = window.myCPP || {};
          
         updateContactAttribute(contact.getActiveInitialConnection().getEndpoint().phoneNumber);   
 
-        contact.onConnected(updateUi);
+       
         contact.onEnded(clearContactAttribute);
     }
 
@@ -61,17 +61,13 @@ window.myCPP = window.myCPP || {};
 
     function updateContactAttribute(contactID){
         const tableRef = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
-        
-                        let row = tableRef.insertRow(tableRef.rows.length);
-                        let cell1 = row.insertCell(0);
-                        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+addDashes(contactID.replace('+1', '%20'));
-                        cell1.innerHTML = '<a href="'+url+'"target="_blank">JIRA link</a>';
-                       
+        let row = tableRef.insertRow(tableRef.rows.length);
+        let cell1 = row.insertCell(0);
+        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+addDashes(contactID);
+        cell1.innerHTML = '<a href="'+url+'"target="_blank">JIRA link</a>';
                 }
             
         
-
-
         
     function clearContactAttribute(){
         let old_tbody= document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
