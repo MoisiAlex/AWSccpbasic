@@ -1,16 +1,7 @@
-
 window.myCPP = window.myCPP || {};
 
     //replace with the CCP URL for the current Amazon Connect instance
     const ccpUrl = "https://perficientdemo.awsapps.com/connect/ccp#/";
-
-    //add any contact attributes to be excluded
-
-    const CONFIG = 
-          {
-            "hiddenCA": ["secret"]
-          };
-
 
     connect.core.initCCP(containerDiv, {
         ccpUrl: ccpUrl,        
@@ -21,7 +12,6 @@ window.myCPP = window.myCPP || {};
     });
 
     connect.contact(subscribeToContactEvents);   
-    connect.agent(subscribeToAgentEvents);
 
     function subscribeToContactEvents(contact) {
         window.myCPP.contact = contact;
@@ -35,26 +25,14 @@ window.myCPP = window.myCPP || {};
         }
         logInfoMsg("Contact is from queue " + contact.getQueue().name);    
         logInfoMsg("ContactID is " + contact.getContactId());   
-        logInfoMsg("Contact attributes are " + JSON.stringify(contact.getAttributes()));
-
-         
+        logInfoMsg("Contact attributes are " + JSON.stringify(contact.getAttributes()));        
         updateContactAttribute(contact.getActiveInitialConnection().getEndpoint().phoneNumber);   
-
-       
         contact.onEnded(clearContactAttribute);
     }
 
-    function subscribeToAgentEvents(agent){
-         console.log("Subscribing to agent events...");
-         var name = agent.getName();
-         console.log("Agent Name Is " + name);
-         var config = agent.getConfiguration();
-         console.log("Agent configuration is " + agent.username + " " + agent.name);
-    }
 
-
-    function addDashes(number)
-    {   f_val = number.replace(/\D[^\.]/g, "");
+    function addDashes(number){   
+        f_val = number.replace(/\D[^\.]/g, "");
         phoneNumber = f_val.slice(0,3)+"-"+f_val.slice(3,6)+"-"+f_val.slice(6);
         return phoneNumber;
     }
@@ -63,18 +41,15 @@ window.myCPP = window.myCPP || {};
         const tableRef = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
         let row = tableRef.insertRow(tableRef.rows.length);
         let cell1 = row.insertCell(0);
-        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+addDashes(contactID);
+        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%20"+addDashes(contactID);
         cell1.innerHTML = '<a href="'+url+'"target="_blank">JIRA link</a>';
-                }
+    }
             
-        
-        
     function clearContactAttribute(){
         let old_tbody= document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
         let new_tbody = document.createElement('tbody');    
         old_tbody.parentNode.replaceChild(new_tbody, old_tbody);     
     }
-
 
     function logMsgToScreen(msg) {
         logMsgs.innerHTML =  new Date().toLocaleTimeString() + ' : ' + msg + '<br>' + logMsgs.innerHTML;
