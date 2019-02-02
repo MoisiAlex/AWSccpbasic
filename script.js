@@ -38,7 +38,7 @@ window.myCPP = window.myCPP || {};
         logInfoMsg("Contact attributes are " + JSON.stringify(contact.getAttributes()));
 
          
-        updateContactAttribute(contact.getContactId());   
+        updateContactAttribute(contact.getActiveInitialConnection().getEndpoint().phoneNumber);   
 
         contact.onConnected(updateUi);
         contact.onEnded(clearContactAttribute);
@@ -58,7 +58,7 @@ window.myCPP = window.myCPP || {};
         
                         let row = tableRef.insertRow(tableRef.rows.length);
                         let cell1 = row.insertCell(0);
-                        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+contactID
+                        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+contactID.replace('+', '');
                         cell1.innerHTML = '<a href="'+url+'">JIRA link</a>';
                        
                 }
