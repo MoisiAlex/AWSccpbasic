@@ -1,11 +1,15 @@
- window.myCPP = window.myCPP || {};
- window.onload = getCurrentMetrics;
-   //replace with the CCP URL for the current Amazon Connect instance
-   // const ccpUrl = "https://MYINSTANCE.awsapps.com/connect/ccp#/";
+
+window.myCPP = window.myCPP || {};
+
+    //replace with the CCP URL for the current Amazon Connect instance
     const ccpUrl = "https://perficientdemo.awsapps.com/connect/ccp#/";
 
-    //replace with API URL
-    const metricAPI = "https://uhht7vyu3j.execute-api.us-east-1.amazonaws.com/Production";
+    //add any contact attributes to be excluded
+
+    const CONFIG = 
+          {
+            "hiddenCA": ["secret"]
+          };
 
 
     connect.core.initCCP(containerDiv, {
@@ -16,68 +20,82 @@
         }
     });
 
-    connect.contact(subscribeToContactEvents);  
-    
+    connect.contact(subscribeToContactEvents);   
+    connect.agent(subscribeToAgentEvents);
 
     function subscribeToContactEvents(contact) {
         window.myCPP.contact = contact;
-        updateContactAttribute(contact.getAttributes());    
+
+        logInfoMsg("New contact offered. Subscribing to events for contact");
+        if (contact.getActiveInitialConnection()
+            && contact.getActiveInitialConnection().getEndpoint()) {
+            logInfoMsg("New contact is from " + contact.getActiveInitialConnection().getEndpoint().phoneNumber);
+        } else {
+            logInfoMsg("This is an existing contact for this agent");
+        }
+        logInfoMsg("Contact is from queue " + contact.getQueue().name);    
+        logInfoMsg("ContactID is " + contact.getContactId());   
+        logInfoMsg("Contact attributes are " + JSON.stringify(contact.getAttributes()));
+
+         
+        updateContactAttribute(contact.getContactId());   
+
+        contact.onConnected(updateUi);
         contact.onEnded(clearContactAttribute);
-        
     }
 
-    function updateContactAttribute(msg){
-        const tableRef = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];      
-        for (let key in msg) {
-            if (msg.hasOwnProperty(key)) {
+    function subscribeToAgentEvents(agent){
+         console.log("Subscribing to agent events...");
+         var name = agent.getName();
+         console.log("Agent Name Is " + name);
+         var config = agent.getConfiguration();
+         console.log("Agent configuration is " + agent.username + " " + agent.name);
+    }
+
+
+    function updateContactAttribute(contactID){
+        const tableRef = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
+        
                         let row = tableRef.insertRow(tableRef.rows.length);
                         let cell1 = row.insertCell(0);
-                        let cell2 = row.insertCell(1);
-                        cell1.innerHTML = key;
-                        cell2.innerHTML = msg[key]['value'];
-            }
-        }
+                        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+contactID
+                        cell1.innerHTML = '<a href="'+url+'">JIRA link</a>';
+                       
+                }
+            
         
-    }
 
+
+        
     function clearContactAttribute(){
-        const old_tbody= document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
-        const new_tbody = document.createElement('tbody');    
+        let old_tbody= document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
+        let new_tbody = document.createElement('tbody');    
         old_tbody.parentNode.replaceChild(new_tbody, old_tbody);     
     }
 
-    function millisToMinAndSec(millis) {
-          const minutes = Math.floor(millis / 60000);
-          const seconds = ((millis % 60000) / 1000).toFixed(0);
-          return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-        }
 
-     function getCurrentMetrics(){
-            const request = new XMLHttpRequest();
-            request.open('GET', metricAPI , true);
-            request.onload = function () {
+    function logMsgToScreen(msg) {
+        logMsgs.innerHTML =  new Date().toLocaleTimeString() + ' : ' + msg + '<br>' + logMsgs.innerHTML;
+    }
 
-              // Begin accessing JSON data here
-              let data = JSON.parse(this.response);
-
-              if (request.status >= 200 && request.status < 400) {
-                 console.log(data);
-                 updateQueueAttribute(data);          
-              } else {
-                console.log('error');
-                
-              }
-            }
-        request.send();
-        setTimeout(getCurrentMetrics, 5000);
+    function logInfoMsg(msg) {
+        connect.getLog().info(msg);
+        logMsgToScreen(msg);
     }
 
 
-     function  updateQueueAttribute(data){
-        
-        document.getElementById('calls').innerHTML = data.CONTACTS_IN_QUEUE;
-        document.getElementById('lwt').innerHTML = millisToMinAndSec(data.OLDEST_CONTACT_AGE);
-        document.getElementById('availableAgents').innerHTML = data.AGENTS_AVAILABLE;
-        document.getElementById('onlineAgents').innerHTML = data.AGENTS_ONLINE;
+// LogMessages section display controls
 
+const showLogsBtn = document.getElementById('showAttributes');
+const showLogsDiv = document.getElementById('hiddenAttributes');
+const hideLogsBtn = document.getElementById('hideAttributes');
+const hideLogsDiv = document.getElementById('visibleAttributes');
+
+showLogsBtn.addEventListener('click',replaceDisplay);
+hideLogsBtn.addEventListener('click',replaceDisplay);
+
+    function replaceDisplay(){
+            showLogsDiv.style.display = showLogsDiv.style.display === 'none' ? '' : 'none';
+            hideLogsDiv.style.display = hideLogsDiv.style.display === 'none' ? '' : 'none';
     }
+
