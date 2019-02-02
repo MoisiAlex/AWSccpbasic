@@ -58,7 +58,7 @@ window.myCPP = window.myCPP || {};
         
                         let row = tableRef.insertRow(tableRef.rows.length);
                         let cell1 = row.insertCell(0);
-                        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+contactID.replace('+', '');
+                        let url = "https://jiradev.scouting.org/issues/?jql=%22Phone%20Number%22%20%20~%20%"+contactID.replace('+1', '%20');
                         cell1.innerHTML = '<a href="'+url+'">JIRA link</a>';
                        
                 }
